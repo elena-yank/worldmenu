@@ -49,12 +49,18 @@ npm run preview  # локальный предпросмотр сборки: htt
 а раздаётся `nginx:1.27-alpine` по подпути `/worldmenu/` (конфиг — [`deploy/nginx.conf`](deploy/nginx.conf)).
 
 ```bash
-# сборка и запуск (http://localhost:8080/worldmenu/)
+# сборка и запуск (контейнер слушает http://127.0.0.1:8087/worldmenu/)
 docker compose up -d --build
 
 # или без compose
 docker build -t quidditch-worldmenu .
-docker run -d -p 8080:80 --name quidditch-worldmenu quidditch-worldmenu
+docker run -d -p 127.0.0.1:8087:80 --name quidditch-worldmenu quidditch-worldmenu
+```
+
+Проверка, что контейнер жив и отдаёт приложение:
+
+```bash
+curl -I http://127.0.0.1:8087/worldmenu/
 ```
 
 Что учтено в nginx:
@@ -65,10 +71,42 @@ docker run -d -p 8080:80 --name quidditch-worldmenu quidditch-worldmenu
 - `/healthz` — эндпоинт для healthcheck контейнера;
 - `/` → редирект на `/worldmenu/` (удалите этот блок, если корень домена занят другим сервисом).
 
-На сервере контейнер обычно ставят за reverse-proxy с TLS, который проксирует
-`https://quidditch.aurorhq.ru/worldmenu/` на `http://127.0.0.1:8080/worldmenu/`.
-Если прокси снимает префикс — не снимайте его: приложение собрано именно под `/worldmenu/`.
-VK требует HTTPS, поэтому итоговая ссылка для мини-приложения — `https://quidditch.aurorhq.ru/worldmenu/`.
+### Внешний nginx на сервере
+
+Наружу сайт отдаёт системный nginx (`/etc/nginx/sites-enabled/<имя-сайта>` на Debian/Ubuntu
+или `/etc/nginx/conf.d/<имя-сайта>.conf` на RHEL/CentOS). Он принимает HTTPS и проксирует
+`https://quidditch.aurorhq.ru/worldmenu/` в контейнер на `http://127.0.0.1:8087/worldmenu/`.
+
+Готовый блок для вставки **внутрь существующего `server { ... }`** этого сайта —
+в [`deploy/server-nginx.conf`](deploy/server-nginx.conf):
+
+```nginx
+location = /worldmenu {
+    return 301 /worldmenu/;
+}
+
+location /worldmenu/ {
+    proxy_pass http://127.0.0.1:8087;   # без слэша в конце!
+    proxy_http_version 1.1;
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host  $host;
+}
+```
+
+Важные моменты:
+
+- `proxy_pass` указан **без завершающего слэша** — префикс `/worldmenu/` не срезается,
+  потому что сборка Vite сделана под этот подпуть. Со слэшем получите 404 на ассетах.
+- Нужен именно `proxy_pass`, а не `return 302 http://localhost:8087/...`: редирект отправит
+  браузер пользователя на **его собственный** localhost, и сайт откроется только на самом сервере.
+- Применение: `sudo nginx -t && sudo systemctl reload nginx`.
+- Какой файл реально работает: `sudo nginx -T | less`.
+
+VK требует HTTPS, поэтому итоговая ссылка для мини-приложения —
+`https://quidditch.aurorhq.ru/worldmenu/`.
 
 ## Структура проекта
 

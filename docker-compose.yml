@@ -5,6 +5,8 @@ services:
     container_name: quidditch-worldmenu
     restart: unless-stopped
     ports:
-      # Снаружи приложение доступно на http://<host>:8080/worldmenu/
-      # Дальше его обычно закрывает reverse-proxy с HTTPS (nginx/Traefik/Caddy).
-      - '8080:80'
+      # Контейнер слушает только localhost:8087 — снаружи его закрывает
+      # системный nginx (см. deploy/server-nginx.conf), который проксирует
+      # https://<домен>/worldmenu/ на http://127.0.0.1:8087/worldmenu/.
+      # Если нужен прямой доступ по сети — замените на '8087:80'.
+      - '127.0.0.1:8087:80'
