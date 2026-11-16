@@ -1,0 +1,15 @@
+node_modules
+dist
+dist-ssr
+.git
+.gitignore
+.vscode
+.idea
+screenshots
+*.local
+npm-debug.log*
+yarn-error.log*
+.DS_Store
+.codeassistantignore
+Dockerfile
+docker-compose.yml

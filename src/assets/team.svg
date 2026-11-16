@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="400" height="240" role="img" aria-label="Команда">
+  <defs>
+    <linearGradient id="team-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8B6CFF"/>
+      <stop offset="1" stop-color="#5A3FD6"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="240" fill="url(#team-bg)"/>
+  <circle cx="370" cy="40" r="90" fill="#FFFFFF" opacity="0.1"/>
+  <circle cx="30" cy="200" r="90" fill="#FFFFFF" opacity="0.08"/>
+  <g fill="#FFFFFF">
+    <circle cx="200" cy="86" r="30" opacity="0.95"/>
+    <path d="M200 124c-30 0-54 20-54 46v10h108v-10c0-26-24-46-54-46z" opacity="0.95"/>
+    <circle cx="108" cy="128" r="23" opacity="0.6"/>
+    <path d="M108 159c-23 0-42 16-42 35v7h84v-7c0-19-19-35-42-35z" opacity="0.6"/>
+    <circle cx="292" cy="128" r="23" opacity="0.6"/>
+    <path d="M292 159c-23 0-42 16-42 35v7h84v-7c0-19-19-35-42-35z" opacity="0.6"/>
+  </g>
+</svg>

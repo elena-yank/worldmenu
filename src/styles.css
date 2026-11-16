@@ -1,0 +1,148 @@
+/* ---------- Экран меню ---------- */
+
+.menu-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ---------- Сетка плиток: 5 вертикальных колонок ---------- */
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* ---------- Плитка ---------- */
+
+.tile {
+  position: relative;
+  height: 100%;
+  min-height: 280px;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.tile:focus-visible {
+  outline: 2px solid var(--vkui--color_stroke_accent);
+  outline-offset: -2px;
+}
+
+.tile__media {
+  position: absolute;
+  inset: 0;
+}
+
+.tile__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+@media (hover: hover) {
+  .tile:hover .tile__media img {
+    transform: scale(1.04);
+  }
+}
+
+.tile__body {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 28px 8px 16px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+.tile__title {
+  color: #ffffff;
+  font-size: clamp(12px, 1.3vw, 18px);
+  line-height: 1.2;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Контент модального окна ---------- */
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.modal-lead {
+  color: var(--vkui--color_text_secondary);
+}
+
+.modal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.modal-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.modal-fact {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--vkui--color_background_secondary);
+}
+
+.modal-fact__value {
+  margin-bottom: 2px;
+}
+
+.modal-fact__label {
+  color: var(--vkui--color_text_secondary);
+}
+
+.modal-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-contact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--vkui--color_background_secondary);
+}
+
+.modal-contact__label {
+  color: var(--vkui--color_text_secondary);
+  flex: 0 0 auto;
+}
+
+.modal-contact__value {
+  color: var(--vkui--color_text_link);
+  font-weight: 500;
+  text-align: right;
+  word-break: break-word;
+  text-decoration: none;
+}
+
+a.modal-contact__value:hover {
+  text-decoration: underline;
+}

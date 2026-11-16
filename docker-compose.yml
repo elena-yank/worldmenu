@@ -1,0 +1,10 @@
+services:
+  worldmenu:
+    build: .
+    image: quidditch-worldmenu:latest
+    container_name: quidditch-worldmenu
+    restart: unless-stopped
+    ports:
+      # Снаружи приложение доступно на http://<host>:8080/worldmenu/
+      # Дальше его обычно закрывает reverse-proxy с HTTPS (nginx/Traefik/Caddy).
+      - '8080:80'
